@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap');
+
+body{
+    background-color: seagreen;
+    font-family: 'Source Sans Pro';
+}
+
+.titleheader{
+    font-size: 3rem;
+    text-align: center;
+    padding: 1rem 0 1rem 0;
+    margin: 1rem 0.25rem 1rem 0.25rem;
+    background-color: white;
+    border-radius: 0.2rem;
+    box-shadow: 0.05rem 0.05rem 0.1rem black;
+}
+
+.container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.columncontainer{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.checkcontainer{
+    margin: 0.25rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.25rem 0.75rem 0.25rem 0.75rem;
+    background-color: white;
+    border-radius: 0.2rem;
+    box-shadow: 0.05rem 0.05rem 0.1rem black;
+}
+
+.cardcheck{
+    font-size: 1rem;
+    margin-left: 0.5rem;
+}
+
+@media (min-width: 576px) { 
+    .purple-h1{
+        color: orange;
+    }
+ }
+
+
+@media (min-width: 768px) { 
+    .purple-h1{
+        color: green;
+    }
+}
+
+
+@media (min-width: 992px) { 
+    .purple-h1{
+        color: blue;
+    }
+}
+
+
+@media (min-width: 1200px) { 
+    .purple-h1{
+        color: red;
+    }
+}
