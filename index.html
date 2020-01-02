@@ -8,7 +8,7 @@
             MTG Checklist
         </title>
 
-        <template>
+        <template id="checkboxtemplate">
             <div class="checkcontainer">
                 <input name="cardname" type="checkbox">
                 <label for="cardname" class="cardcheck">
@@ -28,61 +28,16 @@
             <div id="progressbar"></div>
         </div>
 
-        <div class="container">
-
-                <div class="checkcontainer">
-                    <input name="card1" type="checkbox">
-                    <label for="card1" class="cardcheck">
-                        Tarmogoyf
-                    </label>
-                </div>
-                
-                <div class="checkcontainer">
-                    <input name="card2" type="checkbox">
-                    <label for="card2" class="cardcheck">
-                        Liliana of the Veil
-                    </label>
-                </div>        
-
-                <div class="checkcontainer">
-                    <input name="card3" type="checkbox">
-                    <label for="card3" class="cardcheck">
-                        Bloodbraid Elf
-                    </label>
-                </div>
-
-
-        
-                <div class="checkcontainer">
-                    <input name="card4" type="checkbox">
-                    <label for="card4" class="cardcheck">
-                        Lightning Bolt
-                    </label>
-                </div>
-                
-                <div class="checkcontainer">
-                    <input name="card5" type="checkbox">
-                    <label for="card5" class="cardcheck">
-                        Verdant Catacombs
-                    </label>
-                </div>        
-
-                <div class="checkcontainer">
-                    <input name="card6" type="checkbox">
-                    <label for="card6" class="cardcheck">
-                        Thoughtseize
-                    </label>
-                </div>
-          
+        <div class="container" id="listcontainer">
+            <!--Card List populates here-->
         </div>
-
-        
 
         <div id="dlcontainer">
             <textarea id="decklist" rows="10">Enter decklist here . . .</textarea>
             <button id="getlistbutton">Get your list!</button>
         </div>
 
-        <script src="progresscheck.js"></script>
+        <script src="scripts/progresscheck.js"></script>
+        <script src="scripts/builddecklist.js"></script>
     </body>
 </html>
