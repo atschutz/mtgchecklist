@@ -7,6 +7,15 @@
         <title>
             MTG Checklist
         </title>
+
+        <template>
+            <div class="checkcontainer">
+                <input name="cardname" type="checkbox">
+                <label for="cardname" class="cardcheck">
+                    Empty
+                </label>
+            </div>
+        </template>
     </head>
     
     <body>
@@ -20,7 +29,7 @@
         </div>
 
         <div class="container">
-            <div class="columncontainer">
+
                 <div class="checkcontainer">
                     <input name="card1" type="checkbox">
                     <label for="card1" class="cardcheck">
@@ -41,9 +50,9 @@
                         Bloodbraid Elf
                     </label>
                 </div>
-            </div>
 
-        <div class="columncontainer">
+
+        
                 <div class="checkcontainer">
                     <input name="card4" type="checkbox">
                     <label for="card4" class="cardcheck">
@@ -64,8 +73,16 @@
                         Thoughtseize
                     </label>
                 </div>
-            </div>
+          
         </div>
+
+        
+
+        <div id="dlcontainer">
+            <textarea id="decklist" rows="10">Enter decklist here . . .</textarea>
+            <button id="getlistbutton">Get your list!</button>
+        </div>
+
         <script src="progresscheck.js"></script>
     </body>
 </html>
