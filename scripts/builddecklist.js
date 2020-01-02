@@ -20,15 +20,4 @@ button.addEventListener('click', () => {
             container.appendChild(clone)
         }
     })
-
-
-//  // Clone the new row and insert it into the table
-//  var tbody = document.querySelector("tbody");
-//  var clone = document.importNode(template.content, true);
-//  var td = clone.querySelectorAll("td");
-//  td[0].textContent = "1235646565";
-//  td[1].textContent = "Stuff";
-
-//  tbody.appendChild(clone);
-
 })
