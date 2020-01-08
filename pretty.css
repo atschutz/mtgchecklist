@@ -5,7 +5,7 @@ body{
     font-family: 'Source Sans Pro';
     max-width: 100%;
     overflow-x: hidden;
-    margin: 1rem 1rem
+    margin: 1rem 1rem;
 }
 
 .titleheader{
@@ -43,30 +43,18 @@ body{
 }
 
 .container{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 0 auto;
-}
-
-.columncontainer{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+    column-count: 1;
+    column-gap: 0.25rem;
+    padding-bottom: 0.25rem;
 }
 
 .checkcontainer{
-    margin: 0.25rem;
-    display: flex;
     width:100%;
-    flex-direction: row;
-    align-items: center;
-    padding: 0.25rem 0.75rem 0.25rem 0.75rem;
+    display: inline-flex;
+    margin-bottom: 0.25rem;
     background-color: whitesmoke;
     border-radius: 0.2rem;
     box-shadow: 0.05rem 0.05rem 0.1rem black;
-    overflow: hidden;
 }
 
 .cardcheck{
@@ -97,13 +85,13 @@ body{
 }
 
 @media (min-width: 500px){ 
-    .checkcontainer{
-        flex: 1 0 35%;
+    .container{
+        column-count: 2;
     }
  }
 
  @media (min-width:750px){
-     .checkcontainer{
-         flex: 1 0 26%
+     .container{
+         column-count: 3;
      }
  }

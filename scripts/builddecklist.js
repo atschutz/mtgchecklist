@@ -29,9 +29,6 @@ button.addEventListener('click', () => {
 
             checkbox.name = 'cb' + index
 
-            console.log(label)
-            console.log(checkbox)
-
             container.appendChild(clone)
         }
     })
@@ -40,3 +37,28 @@ button.addEventListener('click', () => {
 
     progressBarListener()
 })
+
+//get card data and prices
+function getCardData(cardName){
+    const base = 'https://api.scryfall.com';
+    const api = '/cards/named?fuzzy=';
+        
+    fetch(base + api + cardName.replace(/\s/g, "+"))
+    .then(res => {
+        return res.json()
+    })
+    .then(res => {
+        //res is now a json!
+        if (res.status === 404)
+        {
+
+            throw new Error(item + " doesnt exist")
+        } else {
+            console.log(res.oracle_text)
+        }
+    })
+    .catch(e => {
+        //error handling
+        console.log(e)
+    })
+}
