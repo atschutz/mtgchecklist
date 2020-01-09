@@ -45,6 +45,7 @@ body{
 #errormessage{
     display: none;
     padding: 0.25rem;
+    margin-bottom: 0.5rem;
     background-color: rgb(255, 200, 200);
     color: rgb(150, 10, 10);
     font-style: bold;

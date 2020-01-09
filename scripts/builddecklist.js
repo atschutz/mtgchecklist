@@ -13,7 +13,14 @@ textbox.addEventListener('click', () => {
 button.addEventListener('click', () => {
     while(container.firstChild) {
         container.removeChild(container.firstChild);
+    }                          
+    while(errorMessage.firstChild) {
+        errorMessage.removeChild(errorMessage.firstChild);
     }
+
+    // clear any potentially existing errors
+    errorMessage.style.display = "none"
+    errorMessage.innerHTML = "The following cards could not be found:"
 
     let cardList = textbox.value.split('\n')
 
@@ -38,22 +45,17 @@ function getCardData(cardName, id){
         return res.json()
     })
     .then(res => {
-        //res is now a json!
         if (res.status === 404)
         {
-            console.log(cardName + " not a card in getCardData")
-
-            errorMessage.style.display = "block"
+            if (errorMessage.style.display = "none") errorMessage.style.display = "block"
 
             let node = document.createElement("LI");
             let textnode = document.createTextNode(cardName);
             
             node.appendChild(textnode);                             
             errorMessage.appendChild(node); 
-        } else {
+        } else if (res.status !== 400) {
             name = res.name
-
-            console.log("we have " + name)
 
             let clone = document.importNode(template.content, true)
             let label = clone.querySelector('label')
