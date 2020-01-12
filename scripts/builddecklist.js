@@ -4,6 +4,14 @@ const button = document.querySelector('#getlistbutton')
 const template = document.querySelector('#checkboxtemplate')
 const errorMessage = document.querySelector('#errormessage')
 
+const landList = new Array()
+const creatureList = new Array()
+const enchantmentList = new Array()
+const artifactList = new Array()
+const planeswalkerList = new Array()
+const instantList = new Array()
+const sorceryList = new Array()
+
 textbox.addEventListener('click', () => {
     if (textbox.value == textbox.innerHTML) {
         textbox.value = ''
@@ -30,11 +38,9 @@ button.addEventListener('click', () => {
     })
 
     textbox.value = textbox.innerHTML
-
-    progressBarListener()
 })
 
-//get card data
+// get card data
 function getCardData(cardName, id){
     const base = 'https://api.scryfall.com'
     const api = '/cards/named?fuzzy='
@@ -45,6 +51,34 @@ function getCardData(cardName, id){
         return res.json()
     })
     .then(res => {
+        // sort cards by type in this order:
+        // land, creature, enchantment, artifact, planeswalker, instant, sorcery
+        let type = res.type_line
+        if (type.includes("Land")) { 
+            landList.push(res) 
+            console.log(res.name + " is a Land")
+        } else if (type.includes("Creature")) { 
+            creatureList.push(res) 
+            console.log(res.name + " is a Creature")
+        } else if (type.includes("Enchantment")) { 
+            enchantmentList.push(res) 
+            console.log(res.name + " is an Enchantment")
+        } else if (type.includes("Artifact")) { 
+            artifactList.push(res) 
+            console.log(res.name + " is an Artifact")
+        } else if (type.includes("Planeswalker")) { 
+            planeswalkerList.push(res)
+            console.log(res.name + " is a Planeswalker")
+        } else if (type.includes("Instant")) { 
+            instantList.push(res) 
+            console.log(res.name + " is an Instant")
+        } else if (type.includes("Sorcery")) { 
+            sorceryList.push(res) 
+            console.log(res.name + " is a Sorcery")
+        } else { 
+            throw new Error("Could not match a type to this card")
+        }
+
         if (res.status === 404)
         {
             if (errorMessage.style.display = "none") errorMessage.style.display = "block"
@@ -71,6 +105,8 @@ function getCardData(cardName, id){
             checkbox.name = 'cb' + id
 
             container.appendChild(clone)
+
+            progressBarListener(checkbox)
         }
     })
     .catch(e => {
