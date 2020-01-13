@@ -16,7 +16,6 @@ button.addEventListener('click', () => {
     }
 
     let childDivs = container.querySelectorAll('div')
-    console.log(childDivs)
 
     childDivs.forEach(child => {
         child.style.display = 'none'
@@ -81,7 +80,6 @@ function getCardData(cardList){
             }
         })
         .catch(e => {
-            //error handling
             console.log(e)
         })
     })
@@ -94,8 +92,7 @@ function buildCheckbox(item, containerId) {
     let cbContainer = document.querySelector(containerId)
 
     if (cbContainer.style.display !== 'inline-flex') { 
-        cbContainer.style.display = 'inline-flex' 
-        console .log("we visible! In " + containerId)
+        cbContainer.style.display = 'inline-flex'
     }
 
     // give "for" for this label a unique id
