@@ -1,16 +1,8 @@
 const container = document.querySelector('#listcontainer')
 const textbox = document.querySelector('#decklist')
 const button = document.querySelector('#getlistbutton')
-const template = document.querySelector('#checkboxtemplate')
 const errorMessage = document.querySelector('#errormessage')
-
-const landList = new Array()
-const creatureList = new Array()
-const enchantmentList = new Array()
-const artifactList = new Array()
-const planeswalkerList = new Array()
-const instantList = new Array()
-const sorceryList = new Array()
+const checkboxTemplate = document.querySelector('#checkboxtemplate')
 
 textbox.addEventListener('click', () => {
     if (textbox.value == textbox.innerHTML) {
@@ -18,99 +10,103 @@ textbox.addEventListener('click', () => {
     }
 })
 
-button.addEventListener('click', () => {
-    while(container.firstChild) {
-        container.removeChild(container.firstChild);
-    }                          
+button.addEventListener('click', () => {                         
     while(errorMessage.firstChild) {
         errorMessage.removeChild(errorMessage.firstChild);
     }
 
-    // clear any potentially existing errors
-    errorMessage.style.display = "none"
-    errorMessage.innerHTML = "The following cards could not be found:"
+    let childDivs = container.querySelectorAll('div')
+    console.log(childDivs)
 
-    let cardList = textbox.value.split('\n')
-
-    cardList.forEach((card, index) => {
-        card = card.trim()
-        getCardData(card, index)
+    childDivs.forEach(child => {
+        child.style.display = 'none'
     })
 
+    // clear any potentially existing errors
+    errorMessage.style.display = 'none'
+    errorMessage.innerHTML = "The following entries could not be found:";
+    
+
+    // process list of entered cards
+    let cardList = textbox.value.split('\n')
+    getCardData(cardList)
+
+    // reset text in deck list textbox
     textbox.value = textbox.innerHTML
 })
 
-// get card data
-function getCardData(cardName, id){
+// TODO fix the name of this function 
+function getCardData(cardList){
     const base = 'https://api.scryfall.com'
     const api = '/cards/named?fuzzy='
-    let name = ""
 
-    fetch(base + api + cardName.replace(/\s/g, "+"))
-    .then(res => {
-        return res.json()
+    cardList.forEach((card, index) => {
+        let cardName = card.trim()
+
+        fetch(base + api + cardName.replace(/\s/g, "+"))
+        .then(res => {
+            return res.json()
+        })
+        .then(res => {
+            if (res.status === 404)
+            {
+                if (errorMessage.style.display === "none") { errorMessage.style.display = "block" }
+
+                let node = document.createElement("LI")
+                let textnode = document.createTextNode(cardName)
+                
+                node.appendChild(textnode)                             
+                errorMessage.appendChild(node) 
+            } else if (res.status !== 400) {
+                // sort cards by type in this order:
+                // land, creature, enchantment, artifact, planeswalker, instant, sorcery
+                let type = res.type_line
+                if (type.includes("Land")) {
+                    buildCheckbox(res, "#landcontainer")
+                } else if (type.includes("Creature")) { 
+                    buildCheckbox(res, "#creaturecontainer")
+                } else if (type.includes("Enchantment")) { 
+                    buildCheckbox(res, "#enchantmentcontainer")
+                } else if (type.includes("Artifact")) {
+                    buildCheckbox(res, "#artifactcontainer")
+                } else if (type.includes("Planeswalker")) { 
+                    buildCheckbox(res, "#planeswalkercontainer")
+                } else if (type.includes("Instant")) {
+                    buildCheckbox(res, "#instantcontainer")
+                } else if (type.includes("Sorcery")) { 
+                    buildCheckbox(res, "#sorcerycontainer")
+                } else { 
+                    throw new Error("Could not match a type to this card")
+                }
+            }
+        })
+        .catch(e => {
+            //error handling
+            console.log(e)
+        })
     })
-    .then(res => {
-        // sort cards by type in this order:
-        // land, creature, enchantment, artifact, planeswalker, instant, sorcery
-        let type = res.type_line
-        if (type.includes("Land")) { 
-            landList.push(res) 
-            console.log(res.name + " is a Land")
-        } else if (type.includes("Creature")) { 
-            creatureList.push(res) 
-            console.log(res.name + " is a Creature")
-        } else if (type.includes("Enchantment")) { 
-            enchantmentList.push(res) 
-            console.log(res.name + " is an Enchantment")
-        } else if (type.includes("Artifact")) { 
-            artifactList.push(res) 
-            console.log(res.name + " is an Artifact")
-        } else if (type.includes("Planeswalker")) { 
-            planeswalkerList.push(res)
-            console.log(res.name + " is a Planeswalker")
-        } else if (type.includes("Instant")) { 
-            instantList.push(res) 
-            console.log(res.name + " is an Instant")
-        } else if (type.includes("Sorcery")) { 
-            sorceryList.push(res) 
-            console.log(res.name + " is a Sorcery")
-        } else { 
-            throw new Error("Could not match a type to this card")
-        }
+}
 
-        if (res.status === 404)
-        {
-            if (errorMessage.style.display = "none") errorMessage.style.display = "block"
+function buildCheckbox(item, containerId) {
+    let checkContainerClone = document.importNode(checkboxTemplate.content, true)
+    let label = checkContainerClone.querySelector('label')
+    let checkbox = checkContainerClone.querySelector('input[type=checkbox]')
+    let cbContainer = document.querySelector(containerId)
 
-            let node = document.createElement("LI");
-            let textnode = document.createTextNode(cardName);
-            
-            node.appendChild(textnode);                             
-            errorMessage.appendChild(node); 
-        } else if (res.status !== 400) {
-            name = res.name
+    if (cbContainer.style.display !== 'inline-flex') { 
+        cbContainer.style.display = 'inline-flex' 
+        console .log("we visible! In " + containerId)
+    }
 
-            let clone = document.importNode(template.content, true)
-            let label = clone.querySelector('label')
-            let checkbox = clone.querySelector('input[type=checkbox]')
-            
-            // give "for" for this label a unique id
-            label.htmlFor = 'cb' + id
+    // give "for" for this label a unique id
+    label.htmlFor = 'cb' + item.id
 
-            // set label to card name
-            label.innerHTML = name
+    // set label to card name
+    label.innerHTML = item.name
 
-            // give this checkbox a name that matches its label
-            checkbox.name = 'cb' + id
+    // give this checkbox a name that matches its label
+    checkbox.name = 'cb' + item.id
 
-            container.appendChild(clone)
-
-            progressBarListener(checkbox)
-        }
-    })
-    .catch(e => {
-        //error handling
-        console.log(e)
-    })
+    cbContainer.appendChild(checkContainerClone)
+    progressBarListener(checkbox)
 }

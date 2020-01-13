@@ -61,32 +61,27 @@ body{
     padding-bottom: 0.25rem;
 }
 
-.typeContainer{
+.typecontainer{
     width:100%;
-    display: inline-flex;
+    display: none;
+    flex-direction: column;
     margin-bottom: 0.25rem;
     background-color: whitesmoke;
     border-radius: 0.2rem;
     box-shadow: 0.05rem 0.05rem 0.1rem black;
 }
 
-.typeHeader{
+.typeheader{
     font-size: 1.5rem;
+    margin: 0.25rem;
     text-align: center;
-    padding: 1rem 0 1rem 0;
-    margin: 1rem 0.25rem 1rem 0.25rem;
-    background-color: whitesmoke;
-    border-radius: 0.2rem;
-    box-shadow: 0.05rem 0.05rem 0.1rem black;
 }
 
 .checkcontainer{
     width:100%;
     display: inline-flex;
     margin-bottom: 0.25rem;
-    background-color: whitesmoke;
-    border-radius: 0.2rem;
-    box-shadow: 0.05rem 0.05rem 0.1rem black;
+    margin-left: 0.5rem;
 }
 
 .cardcheck{
