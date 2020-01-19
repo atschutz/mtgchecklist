@@ -63,7 +63,7 @@ body{
 
 .typecontainer{
     width:100%;
-    display: none;
+    display: inline-flex;
     flex-direction: column;
     margin-bottom: 0.25rem;
     background-color: whitesmoke;
@@ -81,7 +81,6 @@ body{
     width:100%;
     display: inline-flex;
     margin-bottom: 0.25rem;
-    margin-left: 0.5rem;
 }
 
 .cardcheck{

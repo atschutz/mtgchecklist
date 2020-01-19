@@ -3,6 +3,7 @@ const textbox = document.querySelector('#decklist')
 const button = document.querySelector('#getlistbutton')
 const errorMessage = document.querySelector('#errormessage')
 const checkboxTemplate = document.querySelector('#checkboxtemplate')
+const typeContainerTemplate = document.querySelector('#typecontainertemplate')
 
 textbox.addEventListener('click', () => {
     if (textbox.value == textbox.innerHTML) {
@@ -25,7 +26,6 @@ button.addEventListener('click', () => {
     errorMessage.style.display = 'none'
     errorMessage.innerHTML = "The following entries could not be found:";
     
-
     // process list of entered cards
     let cardList = textbox.value.split('\n')
     getCardData(cardList)
@@ -60,20 +60,21 @@ function getCardData(cardList){
                 // sort cards by type in this order:
                 // land, creature, enchantment, artifact, planeswalker, instant, sorcery
                 let type = res.type_line
+
                 if (type.includes("Land")) {
-                    buildCheckbox(res, "#landcontainer")
+                    buildCheckbox(res, "Land")
                 } else if (type.includes("Creature")) { 
-                    buildCheckbox(res, "#creaturecontainer")
+                    buildCheckbox(res, "Creature")
                 } else if (type.includes("Enchantment")) { 
-                    buildCheckbox(res, "#enchantmentcontainer")
+                    buildCheckbox(res, "Enchantment")
                 } else if (type.includes("Artifact")) {
-                    buildCheckbox(res, "#artifactcontainer")
+                    buildCheckbox(res, "Artifact")
                 } else if (type.includes("Planeswalker")) { 
-                    buildCheckbox(res, "#planeswalkercontainer")
+                    buildCheckbox(res, "Planeswalker")
                 } else if (type.includes("Instant")) {
-                    buildCheckbox(res, "#instantcontainer")
+                    buildCheckbox(res, "Instant")
                 } else if (type.includes("Sorcery")) { 
-                    buildCheckbox(res, "#sorcerycontainer")
+                    buildCheckbox(res, "Sorcery")
                 } else { 
                     throw new Error("Could not match a type to this card")
                 }
@@ -85,15 +86,13 @@ function getCardData(cardList){
     })
 }
 
-function buildCheckbox(item, containerId) {
+function buildCheckbox(item, type) {
     let checkContainerClone = document.importNode(checkboxTemplate.content, true)
     let label = checkContainerClone.querySelector('label')
     let checkbox = checkContainerClone.querySelector('input[type=checkbox]')
-    let cbContainer = document.querySelector(containerId)
 
-    if (cbContainer.style.display !== 'inline-flex') { 
-        cbContainer.style.display = 'inline-flex'
-    }
+    typeContainerId = buildTypeContainer(type)
+    let typeContainer = document.querySelector('#' + typeContainerId)
 
     // give "for" for this label a unique id
     label.htmlFor = 'cb' + item.id
@@ -104,6 +103,24 @@ function buildCheckbox(item, containerId) {
     // give this checkbox a name that matches its label
     checkbox.name = 'cb' + item.id
 
-    cbContainer.appendChild(checkContainerClone)
+    typeContainer.appendChild(checkContainerClone)
     progressBarListener(checkbox)
+}
+
+function buildTypeContainer(type) {
+    let typeId = type + '-container'
+
+    if (container.querySelector('#' + typeId) === null)
+    {
+        let typeContainerClone = document.importNode(typeContainerTemplate.content, true)
+        let typeDiv = typeContainerClone.querySelector('div')
+        let header = typeContainerClone.querySelector('h1')
+
+        typeDiv.id = typeId
+        header.innerHTML = type
+
+        container.appendChild(typeContainerClone)
+    }
+
+    return typeId
 }
