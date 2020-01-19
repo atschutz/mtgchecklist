@@ -16,11 +16,9 @@ button.addEventListener('click', () => {
         errorMessage.removeChild(errorMessage.firstChild);
     }
 
-    let childDivs = container.querySelectorAll('div')
-
-    childDivs.forEach(child => {
-        child.style.display = 'none'
-    })
+    while(container.firstChild){
+        container.removeChild(container.firstChild)
+    }
 
     // clear any potentially existing errors
     errorMessage.style.display = 'none'
@@ -39,7 +37,7 @@ function getCardData(cardList){
     const base = 'https://api.scryfall.com'
     const api = '/cards/named?fuzzy='
 
-    cardList.forEach((card, index) => {
+    cardList.forEach(card => {
         let cardName = card.trim()
 
         fetch(base + api + cardName.replace(/\s/g, "+"))
@@ -49,7 +47,7 @@ function getCardData(cardList){
         .then(res => {
             if (res.status === 404)
             {
-                if (errorMessage.style.display === "none") { errorMessage.style.display = "block" }
+                errorMessage.style.display = errorMessage.style.display === "block" ? "none" : "block"
 
                 let node = document.createElement("LI")
                 let textnode = document.createTextNode(cardName)
@@ -57,27 +55,16 @@ function getCardData(cardList){
                 node.appendChild(textnode)                             
                 errorMessage.appendChild(node) 
             } else if (res.status !== 400) {
-                // sort cards by type in this order:
-                // land, creature, enchantment, artifact, planeswalker, instant, sorcery
-                let type = res.type_line
+                const cardType = res.type_line
+                const types = ["Land", "Creature", "Enchantment", "Artifact", "Planeswalker", "Instant", "Sorcery"]
 
-                if (type.includes("Land")) {
-                    buildCheckbox(res, "Land")
-                } else if (type.includes("Creature")) { 
-                    buildCheckbox(res, "Creature")
-                } else if (type.includes("Enchantment")) { 
-                    buildCheckbox(res, "Enchantment")
-                } else if (type.includes("Artifact")) {
-                    buildCheckbox(res, "Artifact")
-                } else if (type.includes("Planeswalker")) { 
-                    buildCheckbox(res, "Planeswalker")
-                } else if (type.includes("Instant")) {
-                    buildCheckbox(res, "Instant")
-                } else if (type.includes("Sorcery")) { 
-                    buildCheckbox(res, "Sorcery")
-                } else { 
-                    throw new Error("Could not match a type to this card")
-                }
+                let found = types.some(type => {
+                    if(cardType.includes(type)){
+                        buildCheckbox(res, type)
+                        return true
+                    }
+                })
+                if(!found) throw new Error("Could not match a type to this card") 
             }
         })
         .catch(e => {
@@ -94,14 +81,15 @@ function buildCheckbox(item, type) {
     typeContainerId = buildTypeContainer(type)
     let typeContainer = document.querySelector('#' + typeContainerId)
 
+    const labelText = "cb-" + item.id
     // give "for" for this label a unique id
-    label.htmlFor = 'cb' + item.id
+    label.htmlFor = labelText
 
     // set label to card name
     label.innerHTML = item.name
 
     // give this checkbox a name that matches its label
-    checkbox.name = 'cb' + item.id
+    checkbox.name = labelText
 
     typeContainer.appendChild(checkContainerClone)
     progressBarListener(checkbox)
@@ -110,7 +98,7 @@ function buildCheckbox(item, type) {
 function buildTypeContainer(type) {
     let typeId = type + '-container'
 
-    if (container.querySelector('#' + typeId) === null)
+    if (!container.querySelector('#' + typeId))
     {
         let typeContainerClone = document.importNode(typeContainerTemplate.content, true)
         let typeDiv = typeContainerClone.querySelector('div')
